@@ -2,10 +2,8 @@
 .arm
 .text
 
-    // checks the irq service time
-    // we set a timer interrupt to fire just 
-    // as after we load the timer value
-    // and one immediatly in the service routine
+    // checks the timing of isrs
+    // and that the return address is set properly
 
 isr:
 
@@ -118,7 +116,7 @@ vblank_wait:
 
 fire_intr:
     strh r3, [r2]
-    
+
     // nop sled here in case the return addr is off
     nop
     nop
