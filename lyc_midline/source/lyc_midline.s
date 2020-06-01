@@ -37,7 +37,7 @@ main:
 
 	// turn off interrupts
 	ldr r1, =IME
-	str r0, [r0]
+	str r1, [r1]
 
     // acklowedge all interrupts
     mov r0, #0xffffffff

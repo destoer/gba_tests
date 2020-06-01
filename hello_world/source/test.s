@@ -5,7 +5,7 @@
 main:
 	// turn off interrupts
 	ldr r1, =#0x04000208
-	strb r0, [r0]
+	str r1, [r1]
 
 
 	bl init_text
