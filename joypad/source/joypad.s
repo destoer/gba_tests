@@ -253,10 +253,6 @@ and_no_irq_print:
     mvn r0, #1
     bl button_wait
 
-
-// this NEVER fires unless with force a constant fire in our emulator
-// why?
-
     // check intr fired
     ldrh r5, [r3]
     and r5, #4096
