@@ -113,9 +113,13 @@ vblank_wait:
 
 
     // force an intr
-
+    // make sure your pipeline is full if you emulate it
+    // or youll get some nice behavior
 fire_intr:
     strh r3, [r2]
+
+    // save cpsr
+    mrs r7, cpsr
 
     // nop sled here in case the return addr is off
     nop
@@ -159,6 +163,11 @@ intr_fired:
 
     bl print_hex
 
+    ldr r0, =cpsr_string
+    bl write
+    mov r0, r7
+    bl print_hex
+
 infin:
     b infin
 
@@ -170,6 +179,9 @@ no_intr_string:
 
 intr_fired_string:
     .asciz "interrupt fired\n"
+
+cpsr_string:
+    .asciz "\ncspr: "
 
 timer_string:
     .asciz "timer: "
