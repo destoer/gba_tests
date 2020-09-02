@@ -80,25 +80,21 @@ print_keyinput:
     mvn r0, #0
     bl button_wait
 
-    mov r5, #0
+    // and mode enable intr
+    ldr r5, =#0xc000
     strh r5, [r4]
 
     mvn r0, #0
     bl button_wait
-
-    // set to and mode and enable intr
-    mov r5, #192
-    strb r5, [r4,#1]
-
-
+    
     // check intr fired
     ldrh r5, [r3]
     and r5, #4096
     cmp r5, #4096
 
-    ldr r0, =ok_string
-
     bne and_fail
+
+    ldr r0, =ok_string
 
     b print_and_no_select
 and_fail:

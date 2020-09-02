@@ -1,2 +1,2 @@
 text.o: \
- /home/regulus/projects/gba_tests/gba_tests/hello_world/source/text.s
+ /home/destoer/projects/gba_tests/gba_tests/hello_world/source/text.s
