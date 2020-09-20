@@ -73,6 +73,7 @@ print_keyinput:
     ldr r4, =#0x04000132
 
     // check keycnt and mode intr fires with no buttons pressed
+    // fails on real hardware and i cant figure out why!?
 
     ldr r0, =and_no_select
     bl write
@@ -80,13 +81,17 @@ print_keyinput:
     mvn r0, #0
     bl button_wait
 
-    // and mode enable intr
-    ldr r5, =#0xc000
+    mov r5, #0
     strh r5, [r4]
 
     mvn r0, #0
     bl button_wait
-    
+
+    // set to and mode and enable intr
+    mov r5, #192
+    strb r5, [r4,#1]
+
+
     // check intr fired
     ldrh r5, [r3]
     and r5, #4096
@@ -268,7 +273,7 @@ or_select_print:
 
 
     // check or mode does not fire when the selected button is not pressed
-    
+
     ldr r0, =press_b
     bl write
 
@@ -355,4 +360,4 @@ or_string:
 
 
 done:
-    .asciz "\nyour emulator sucks?\n"
+    .asciz "\nyour emulator sucks?\n" 
