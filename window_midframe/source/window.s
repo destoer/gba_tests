@@ -2,6 +2,9 @@
 .arm
 
 // param r1 line
+// waits for specified line by waiting for line start
+// and then for hblank
+// with swi halt
 wait_line:
     push {r0-r1}
 
@@ -35,6 +38,19 @@ wait_line:
     pop {r0-r1}
     bx lr
 
+
+// param r1 wy min
+// sets wy0 to param
+set_wy0_min:
+    push {r0-r1}
+
+    // ok now set wy0 min to 70
+    ldr r0, =#0x04000044
+    strb r1, [r0,#1] 
+
+    pop {r0-r1}
+    bx lr
+
 main:
 	// turn off interrupts
 	ldr r1, =#0x04000208
@@ -59,11 +75,12 @@ main:
 
     //memcpy red into vram :P
     mov r0, #0x06000000
-    mov r1, #31
+    mov r1, #0
     ldr r2, =#0x06012c00
 
 vram_loop:
     strh r1, [r0]
+    add r1, #10
     add r0, #2
     cmp r2, r0
     bne vram_loop
@@ -85,7 +102,7 @@ vram_loop:
 
     # end of screen cover
     ldr r1, =#0x04000044
-    mov r2, #161
+    mov r2, #141
     strb r2, [r1]
 
 
@@ -100,11 +117,12 @@ vram_loop:
 
     // we aernt going to change this i just want something to make sure the windows
     // are otherwhise behaving fine
-    // 120 - 140
+    // so put something at the top of the screen out of the way of where we are testing
+    // 10 - 40
     ldr r1, =#0x04000046
-    mov r2, #120
+    mov r2, #10
     strb r2, [r1,#1]
-    mov r2, #141
+    mov r2, #41
     strb r2, [r1]
 
 
@@ -131,23 +149,44 @@ window_loop:
     mov r1, #160
     bl wait_line
 
-    // ok now set wy min to 160
-    ldr r1, =#0x04000044
-    mov r2, #160
-    strb r2, [r1,#1] 
+    // no window max = min
+    // wy0 = 140
+    mov r1, #140
+    bl set_wy0_min
 
 
     // in theory it is asserted on line start and a internal flag set
     // so if we dont this it not going to be active
-
-    // wait 180
+    // i.e its not doing >=
+    // wait 80
     mov r1, #80
     bl wait_line
 
-    // ok now set wy min to 70
-    ldr r1, =#0x04000044
-    mov r2, #70
-    strb r2, [r1,#1] 
+    // wy0 = 70
+    mov r1, #70
+    bl set_wy0_min
+
+
+    // from here is new
+
+    // test draw 80-100
+    // wait 100
+    mov r1, #100
+    bl wait_line
+
+    // test if triggering it all gives free reign for rest of screen time
+    mov r1, #101
+    bl set_wy0_min
+    bl wait_line
+
+    // test 101-110
+    mov r1, #110
+    bl set_wy0_min
+    bl wait_line
+
+    // no window max = min
+    mov r1, #140
+    bl set_wy0_min
 
     b window_loop
 
