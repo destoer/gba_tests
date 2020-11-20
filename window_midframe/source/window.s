@@ -30,6 +30,9 @@
 
     thanks fleroviux for testing this in nba =)
     https://github.com/fleroviux/NanoboyAdvance/
+
+    also thanks to powerlated for the expected screenshot
+    https://github.com/Powerlated
 */
 
 
