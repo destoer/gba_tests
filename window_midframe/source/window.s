@@ -1,6 +1,43 @@
 .global main
 .arm
 
+
+/* 
+    tests window behavior in the middle of a frame,
+    how i supsect the hardware works is that win1 & win0 have an internal flag
+    that enables the window
+
+    when it hits y1 it is enabled
+    when it hits y2 it is disabled
+    this is reaserted on every line even vblank
+
+    this explains why setting wy lower than the current line but not directly hitting it
+    will cause the window to not draw
+
+    it also explains this line in gbatek
+    https://problemkaputt.de/gbatek.htm
+    "Y1>Y2 are interpreted as Y2=160"
+
+    because the disable is hit first it will not get turned off again until it wraps back around and hits it
+    gbatek also seems wrong slightly wrong in this regard and said checks are still asserted in vblank
+    likely this is when the ly changes but im not sure
+
+    as can be seen in tonc win_demo
+    https://www.coranac.com/tonc/text/gfx.htm#sec-win
+    
+    moving window off the top and bottom of the screen
+    the y2=160 would make you think the flag is reset at vblank but it does not appear to be the case
+
+    thanks fleroviux for testing this in nba =)
+    https://github.com/fleroviux/NanoboyAdvance/
+*/
+
+
+
+
+
+
+
 // param r1 line
 // waits for specified line by waiting for line start
 // and then for hblank
@@ -40,7 +77,7 @@ wait_line:
 
 
 // param r1 wy min
-// sets wy0 to param
+// sets wy0 y1 to param
 set_wy0_min:
     push {r0-r1}
 
@@ -51,10 +88,22 @@ set_wy0_min:
     pop {r0-r1}
     bx lr
 
+// param r1 wy max
+// sets wy0 y2 to param
+set_wy0_max:
+    push {r0-r1}
+
+    ldr r0, =#0x4000044
+    strb r1, [r0]
+
+    pop {r0-r1}
+    bx lr
+
 main:
 	// turn off interrupts
+    mov r0, #0
 	ldr r1, =#0x04000208
-	str r1, [r1]
+	str r0, [r1]
 
 
 
@@ -138,6 +187,9 @@ vram_loop:
     ldr r1, =#0x6403 // window 0 & 1 on
     strh r1, [r0]
 
+
+// todo how does the object window work?
+
 window_loop:
 
     // now we have a red screen setup the window to turn off the bg
@@ -148,6 +200,20 @@ window_loop:
     // wait 160
     mov r1, #160
     bl wait_line
+
+    // test that it reasserts the check in vblank
+    mov r1, #161
+    bl set_wy0_min
+
+    mov r1, #5
+    bl set_wy0_max
+    bl wait_line
+
+    
+
+    mov r1, #141
+    bl set_wy0_max    
+
 
     // no window max = min
     // wy0 = 140
