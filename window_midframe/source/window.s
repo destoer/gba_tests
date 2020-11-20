@@ -50,9 +50,6 @@ main:
 
 
 
-
-
-    
     // ok red screen gang time
 
     mov r0, #0x04000000 // dispcnt
@@ -78,6 +75,7 @@ vram_loop:
     mov r2, #0xffffffff
     strh r2, [r1]
 
+    // win zero setup
     # max wx conver entire scren
     ldr r1, =#0x4000040
     mov r2, #0
@@ -85,9 +83,28 @@ vram_loop:
     mov r2, #241
     strb r2, [r1]
 
-
+    # end of screen cover
     ldr r1, =#0x04000044
     mov r2, #161
+    strb r2, [r1]
+
+
+
+    // win 1 setup
+    # max wx conver entire scren
+    ldr r1, =#0x4000042
+    mov r2, #0
+    strb r2, [r1,#1]
+    mov r2, #241
+    strb r2, [r1]
+
+    // we aernt going to change this i just want something to make sure the windows
+    // are otherwhise behaving fine
+    // 120 - 140
+    ldr r1, =#0x04000046
+    mov r2, #120
+    strb r2, [r1,#1]
+    mov r2, #141
     strb r2, [r1]
 
 
@@ -100,62 +117,13 @@ vram_loop:
     strh r1, [r0]
 
     mov r0, #0x04000000 // dispcnt
-    ldr r1, =#0x2403 // window 0 on
+    ldr r1, =#0x6403 // window 0 & 1 on
     strh r1, [r0]
 
 window_loop:
 
     // now we have a red screen setup the window to turn off the bg
     // when we do the all important wy write
-
-    // dont even wanna know what this is doing
-/* 
-    // first wait for line one
-    ldr r0, =#04000005
-    mov r1, #0
-    strb r1, [r0]    
-
-    // halt
-    swi #0x020000
-
-    // first wait for line zero
-    ldr r0, =#04000005
-    mov r1, #0
-    strb r1, [r0]    
-
-    // halt
-    swi #0x020000
-
-    // now wait for line 40
-    ldr r0, =#04000005
-    mov r1, #40
-    strb r1, [r0]   
-
-
-    // halt
-    swi #0x020000
-
-    // ok now set wy min to 0
-    ldr r1, =#0x04000044
-    mov r2, #0
-    strb r2, [r1,#1]
-
-
-    // now wait for line 100
-    ldr r0, =#04000005
-    mov r1, #100
-    strb r1, [r0]   
-
-    // halt
-    swi #0x020000
-
-    // ok now set wy min to 90
-    ldr r1, =#0x04000044
-    mov r2, #90
-    strb r2, [r1,#1]
-
-    b window_loop
-*/
 
     // todo fiddle the window turn off
 
@@ -168,7 +136,11 @@ window_loop:
     mov r2, #160
     strb r2, [r1,#1] 
 
-    
+
+    // in theory it is asserted on line start and a internal flag set
+    // so if we dont this it not going to be active
+
+    // wait 180
     mov r1, #80
     bl wait_line
 
