@@ -9,10 +9,10 @@ wait_intr:
     push {r0-r3,lr}
     mov r3, r2
 
-    // store vcount-1 into vcount compare
-    ldr r0, =#04000005
-    ldrb r1, [r0,#1]
-    add r1, #1
+    // store 40 into vcount compare
+    //ldr r0, =#0x04000005
+    //ldrb r1, [r0,#1]
+    mov r1, #40
     strb r1, [r0]
 
     mov r2, #0x02000000
@@ -28,7 +28,7 @@ wait_intr:
     mov r1, #0xffffffff
     strh r1, [r0]
     ldr r0, =#0x04000200
-    mov r1, #2
+    mov r1, #4
     strh r1, [r0]
 
 
@@ -85,9 +85,6 @@ main:
     str r0, [r1]
 
 	bl init_text
-
-    bl write
-
 
     // enable the hblank intr and vcount intr
     ldr r1, =#0x04000004
