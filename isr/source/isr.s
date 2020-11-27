@@ -89,6 +89,7 @@ vblank_wait_arm:
     // force an intr
     // make sure your pipeline is full if you emulate it
     // or youll get some nice behavior
+    ldr r7, =#0xdeadbeef // make it obv if you dont read cpsr back nicely
 fire_intr_arm:
     strh r3, [r2]
 
@@ -126,7 +127,7 @@ intr_fired_arm:
     bl print_hex
 
 
-    ldr r0, =lr_string
+    ldr r0, =arm_lr_string
     bl write
 
     // calc the lr relative to the intr
@@ -265,7 +266,7 @@ main:
     
 return_thumb:
     
-    ldr r0, =lr_string
+    ldr r0, =thumb_lr_string
     bl write
 
     // calc the lr relative to the intr
@@ -315,8 +316,11 @@ cpsr_string:
 timer_string:
     .asciz "timer: "
 
-lr_string:
-    .asciz "\nlr: "
+arm_lr_string:
+    .asciz "\narm lr: "
+thumb_lr_string:
+    .asciz "\nthumb lr: "
+    
     
 swi_string:
     .asciz "\nswi: \n"
