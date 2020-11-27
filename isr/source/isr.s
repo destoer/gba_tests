@@ -272,6 +272,31 @@ return_thumb:
     mov r0, r2
 
     bl print_hex    
+    
+    
+    
+    // ok now we are going to test swi return addresses
+    ldr r0, =swi_string
+    bl write
+    mov r12, #0
+    swi #0x80000
+    
+    // ok lets jam 5 incs to get a rough indicator of where this should return
+    add r12, #1
+    add r12, #1
+    add r12, #1
+    add r12, #1
+    add r12, #1
+    
+    
+    sub r0, r12, #4
+    lsl r0, #2
+    bl print_hex
+    
+    
+    
+    
+    
 infin:
     b infin
 
@@ -292,3 +317,6 @@ timer_string:
 
 lr_string:
     .asciz "\nlr: "
+    
+swi_string:
+    .asciz "\nswi: \n"
