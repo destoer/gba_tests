@@ -18,9 +18,9 @@ Discarded input sections
  .bss           0x0000000000000000        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/crtbegin.o
  .data.__dso_handle
                 0x0000000000000000        0x4 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/crtbegin.o
+ .bss           0x0000000000000000        0x0 text.o
  .data          0x0000000000000000        0x0 main.o
  .bss           0x0000000000000000        0x0 main.o
- .bss           0x0000000000000000        0x0 text.o
  .text          0x0000000000000000        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/libg.a(lib_a-init.o)
  .data          0x0000000000000000        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/libg.a(lib_a-init.o)
  .bss           0x0000000000000000        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/libg.a(lib_a-init.o)
@@ -74,99 +74,99 @@ Linker script and memory map
  *(.plt)
                 0x000000000800021c                . = ALIGN (0x4)
 
-.text           0x000000000800021c      0x3dc
+.text           0x000000000800021c      0x430
  *(EXCLUDE_FILE(*.iwram*) .text*)
  .text.__do_global_dtors_aux
                 0x000000000800021c       0x2c /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/crtbegin.o
  .text.frame_dummy
                 0x0000000008000248       0x24 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/crtbegin.o
- .text          0x000000000800026c      0x158 main.o
-                0x000000000800026c                main
- .text          0x00000000080003c4      0x1e4 text.o
-                0x00000000080003c4                init_text
-                0x0000000008000450                putchar
-                0x00000000080004f0                write
-                0x000000000800051c                print_hex
+ .text          0x000000000800026c      0x1e4 text.o
+                0x000000000800026c                init_text
+                0x00000000080002f8                putchar
+                0x0000000008000398                write
+                0x00000000080003c4                print_hex
+ .text          0x0000000008000450      0x1ac main.o
+                0x0000000008000478                main
  .text.__libc_init_array
-                0x00000000080005a8       0x50 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/libg.a(lib_a-init.o)
-                0x00000000080005a8                __libc_init_array
+                0x00000000080005fc       0x50 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/libg.a(lib_a-init.o)
+                0x00000000080005fc                __libc_init_array
  *(.gnu.linkonce.t.*)
  *(.text.*personality*)
  *(.gnu.warning)
  *(.glue_7t)
- .glue_7t       0x00000000080005f8        0x0 linker stubs
+ .glue_7t       0x000000000800064c        0x0 linker stubs
  *(.glue_7)
- .glue_7        0x00000000080005f8        0x0 linker stubs
+ .glue_7        0x000000000800064c        0x0 linker stubs
  *(.vfp11_veneer)
- .vfp11_veneer  0x00000000080005f8        0x0 linker stubs
-                0x00000000080005f8                . = ALIGN (0x4)
-                0x00000000080005f8                __text_end = .
+ .vfp11_veneer  0x000000000800064c        0x0 linker stubs
+                0x000000000800064c                . = ALIGN (0x4)
+                0x000000000800064c                __text_end = .
 
-.v4_bx          0x00000000080005f8        0x0
- .v4_bx         0x00000000080005f8        0x0 linker stubs
+.v4_bx          0x000000000800064c        0x0
+ .v4_bx         0x000000000800064c        0x0 linker stubs
 
-.iplt           0x00000000080005f8        0x0
- .iplt          0x00000000080005f8        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/gba_crt0.o
+.iplt           0x000000000800064c        0x0
+ .iplt          0x000000000800064c        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/gba_crt0.o
 
-.fini           0x00000000080005f8        0xc
+.fini           0x000000000800064c        0xc
  *(.fini)
- .fini          0x00000000080005f8        0x4 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/crti.o
-                0x00000000080005f8                _fini
- .fini          0x00000000080005fc        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/crtn.o
-                0x0000000008000604                . = ALIGN (0x4)
+ .fini          0x000000000800064c        0x4 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/crti.o
+                0x000000000800064c                _fini
+ .fini          0x0000000008000650        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/crtn.o
+                0x0000000008000658                . = ALIGN (0x4)
 
-.rodata         0x0000000008000604        0x0
+.rodata         0x0000000008000658        0x0
  *(.rodata)
  *all.rodata*(*)
  *(.roda)
  *(.rodata.*)
  *(.gnu.linkonce.r*)
-                0x0000000008000604                . = ALIGN (0x4)
+                0x0000000008000658                . = ALIGN (0x4)
 
 .ARM.extab
  *(.ARM.extab* .gnu.linkonce.armextab.*)
-                0x0000000008000604                __exidx_start = .
+                0x0000000008000658                __exidx_start = .
 
 .ARM.exidx
  *(.ARM.exidx* .gnu.linkonce.armexidx.*)
-                0x0000000008000604                __exidx_end = .
+                0x0000000008000658                __exidx_end = .
 
-.ctors          0x0000000008000604        0x0
+.ctors          0x0000000008000658        0x0
  *crtbegin.o(.ctors)
  *(EXCLUDE_FILE(*crtend.o) .ctors)
  *(SORT_BY_NAME(.ctors.*))
  *(.ctors)
-                0x0000000008000604                . = ALIGN (0x4)
+                0x0000000008000658                . = ALIGN (0x4)
 
-.dtors          0x0000000008000604        0x0
+.dtors          0x0000000008000658        0x0
  *crtbegin.o(.dtors)
  *(EXCLUDE_FILE(*crtend.o) .dtors)
  *(SORT_BY_NAME(.dtors.*))
  *(.dtors)
-                0x0000000008000604                . = ALIGN (0x4)
+                0x0000000008000658                . = ALIGN (0x4)
 
-.eh_frame       0x0000000008000604        0x4
+.eh_frame       0x0000000008000658        0x4
  *(.eh_frame)
- .eh_frame      0x0000000008000604        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/crtbegin.o
- .eh_frame      0x0000000008000604        0x4 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/crtend.o
-                0x0000000008000608                . = ALIGN (0x4)
+ .eh_frame      0x0000000008000658        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/crtbegin.o
+ .eh_frame      0x0000000008000658        0x4 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/crtend.o
+                0x000000000800065c                . = ALIGN (0x4)
 
-.rel.dyn        0x0000000008000608        0x0
- .rel.iplt      0x0000000008000608        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/gba_crt0.o
+.rel.dyn        0x000000000800065c        0x0
+ .rel.iplt      0x000000000800065c        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/gba_crt0.o
 
 .gcc_except_table
-                0x0000000008000608        0x0
+                0x000000000800065c        0x0
  *(.gcc_except_table)
-                0x0000000008000608                . = ALIGN (0x4)
-                0x0000000008000608                __iwram_lma = .
+                0x000000000800065c                . = ALIGN (0x4)
+                0x000000000800065c                __iwram_lma = .
 
-.iwram          0x0000000003000000        0x0 load address 0x0000000008000608
+.iwram          0x0000000003000000        0x0 load address 0x000000000800065c
                 0x0000000003000000                __iwram_start__ = ABSOLUTE (.)
  *(.iwram .iwram*)
  *iwram.*(.text* .data*)
                 0x0000000003000000                . = ALIGN (0x4)
                 0x0000000003000000                __iwram_end__ = ABSOLUTE (.)
-                0x0000000008000608                __data_lma = (__iwram_lma + SIZEOF (.iwram))
+                0x000000000800065c                __data_lma = (__iwram_lma + SIZEOF (.iwram))
 
 .bss            0x0000000003000000       0x20
                 0x0000000003000000                __bss_start = ABSOLUTE (.)
@@ -185,50 +185,50 @@ Linker script and memory map
                 0x0000000003000020                . = ALIGN (0x4)
                 0x0000000003000020                __bss_end__ = ABSOLUTE (.)
 
-.data           0x0000000003000020      0x300 load address 0x0000000008000608
+.data           0x0000000003000020      0x300 load address 0x000000000800065c
                 0x0000000003000020                __data_start__ = ABSOLUTE (.)
  *(.data*)
  .data          0x0000000003000020      0x300 text.o
  *(.gnu.linkonce.d*)
                 0x0000000003000320                . = ALIGN (0x4)
-                0x0000000008000908                __preinit_lma = (__data_lma + SIZEOF (.data))
+                0x000000000800095c                __preinit_lma = (__data_lma + SIZEOF (.data))
 
-.igot.plt       0x0000000003000320        0x0 load address 0x0000000008000908
+.igot.plt       0x0000000003000320        0x0 load address 0x000000000800095c
  .igot.plt      0x0000000003000320        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/gba_crt0.o
 
-.preinit_array  0x0000000003000320        0x0 load address 0x0000000008000908
+.preinit_array  0x0000000003000320        0x0 load address 0x000000000800095c
                 0x0000000003000320                __preinit_array_start = ABSOLUTE (.)
  *(.preinit_array)
                 0x0000000003000320                __preinit_array_end = ABSOLUTE (.)
-                0x0000000008000908                __init_lma = (__preinit_lma + SIZEOF (.preinit_array))
+                0x000000000800095c                __init_lma = (__preinit_lma + SIZEOF (.preinit_array))
 
-.init_array     0x0000000003000320        0x4 load address 0x0000000008000908
+.init_array     0x0000000003000320        0x4 load address 0x000000000800095c
                 0x0000000003000320                __init_array_start = ABSOLUTE (.)
  *(SORT_BY_NAME(.init_array.*))
  *(.init_array)
  .init_array    0x0000000003000320        0x4 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/crtbegin.o
                 0x0000000003000324                __init_array_end = ABSOLUTE (.)
-                0x000000000800090c                __fini_lma = (__init_lma + SIZEOF (.init_array))
+                0x0000000008000960                __fini_lma = (__init_lma + SIZEOF (.init_array))
 
-.fini_array     0x0000000003000324        0x4 load address 0x000000000800090c
+.fini_array     0x0000000003000324        0x4 load address 0x0000000008000960
                 0x0000000003000324                __fini_array_start = ABSOLUTE (.)
  *(SORT_BY_NAME(.fini_array.*))
  *(.fini_array)
  .fini_array    0x0000000003000324        0x4 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/crtbegin.o
                 0x0000000003000328                __fini_array_end = ABSOLUTE (.)
-                0x0000000008000910                __jcr_lma = (__fini_lma + SIZEOF (.fini_array))
+                0x0000000008000964                __jcr_lma = (__fini_lma + SIZEOF (.fini_array))
 
-.jcr            0x0000000003000328        0x0 load address 0x0000000008000910
+.jcr            0x0000000003000328        0x0 load address 0x0000000008000964
  *(.jcr)
                 0x0000000003000328                __data_end__ = ABSOLUTE (.)
-                0x0000000008000910                __iwram_overlay_lma = (__jcr_lma + SIZEOF (.jcr))
+                0x0000000008000964                __iwram_overlay_lma = (__jcr_lma + SIZEOF (.jcr))
                 0x0000000003000328                __iwram_overlay_start = .
 
-.iwram0         0x0000000003000328        0x0 load address 0x0000000008000910
+.iwram0         0x0000000003000328        0x0 load address 0x0000000008000964
  *(.iwram0)
                 0x0000000003000328                . = ALIGN (0x4)
-                0x0000000008000910                PROVIDE (__load_start_iwram0 = LOADADDR (.iwram0))
-                0x0000000008000910                PROVIDE (__load_stop_iwram0 = (LOADADDR (.iwram0) + SIZEOF (.iwram0)))
+                0x0000000008000964                PROVIDE (__load_start_iwram0 = LOADADDR (.iwram0))
+                0x0000000008000964                PROVIDE (__load_stop_iwram0 = (LOADADDR (.iwram0) + SIZEOF (.iwram0)))
 
 .iwram1         0x0000000003000328        0x0
  *(.iwram1)
@@ -284,15 +284,15 @@ Linker script and memory map
                 [!provide]                        PROVIDE (__load_start_iwram9 = LOADADDR (.iwram9))
                 [!provide]                        PROVIDE (__load_stop_iwram9 = (LOADADDR (.iwram9) + SIZEOF (.iwram9)))
                 0x0000000003000328                __iwram_overlay_end = .
-                0x0000000008000910                __ewram_lma = (__iwram_overlay_lma + (__iwram_overlay_end - __iwram_overlay_start))
+                0x0000000008000964                __ewram_lma = (__iwram_overlay_lma + (__iwram_overlay_end - __iwram_overlay_start))
                 0x0000000003000328                __iheap_start = .
                 0x0000000002000000                __ewram_start = ORIGIN (ewram)
 
-.ewram          0x0000000002000000        0x0 load address 0x0000000008000910
+.ewram          0x0000000002000000        0x0 load address 0x0000000008000964
  *(.ewram*)
                 0x0000000002000000                . = ALIGN (0x4)
                 0x0000000002000000                __ewram_end = ABSOLUTE (.)
-                0x0000000008000910                __pad_lma = (__ewram_lma + SIZEOF (.ewram))
+                0x0000000008000964                __pad_lma = (__ewram_lma + SIZEOF (.ewram))
 
 .sbss           0x0000000002000000        0x0
                 0x0000000002000000                __sbss_start__ = ABSOLUTE (.)
@@ -302,11 +302,11 @@ Linker script and memory map
                 0x0000000002000000                __end__ = ABSOLUTE (.)
                 0x0000000002000000                __eheap_start = ABSOLUTE (.)
 
-.pad            0x0000000002000000        0x8 load address 0x0000000008000910
+.pad            0x0000000002000000        0x8 load address 0x0000000008000964
                 0x0000000002000000        0x4 LONG 0x52416b64
                 0x0000000002000004        0x4 LONG 0x4d
                 0x0000000002000008                . = ALIGN (0x4)
-                0x0000000008000918                __rom_end__ = (__pad_lma + SIZEOF (.pad))
+                0x000000000800096c                __rom_end__ = (__pad_lma + SIZEOF (.pad))
 
 .stab
  *(.stab)
@@ -402,9 +402,9 @@ Linker script and memory map
  .ARM.attributes
                 0x000000000000003c       0x2a /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/crtbegin.o
  .ARM.attributes
-                0x0000000000000066       0x1a main.o
+                0x0000000000000066       0x1a text.o
  .ARM.attributes
-                0x0000000000000080       0x1a text.o
+                0x0000000000000080       0x1a main.o
  .ARM.attributes
                 0x000000000000009a       0x2a /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/libg.a(lib_a-init.o)
  .ARM.attributes
@@ -419,8 +419,8 @@ Linker script and memory map
 LOAD /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/gba_crt0.o
 LOAD /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/crti.o
 LOAD /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/crtbegin.o
-LOAD main.o
 LOAD text.o
+LOAD main.o
 LOAD /opt/devkitpro/libgba/lib/libgba.a
 START GROUP
 LOAD /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/libgcc.a
@@ -430,5 +430,5 @@ LOAD /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../ar
 END GROUP
 LOAD /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/crtend.o
 LOAD /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/crtn.o
-OUTPUT(/home/destoer/projects/gba_tests/gba_tests/pcmxx/pcmxx.elf elf32-littlearm)
+OUTPUT(/mnt/c/projects/gba_tests/gba_tests/pcmxx/pcmxx.elf elf32-littlearm)
 LOAD linker stubs

@@ -1,1 +1,1 @@
-main.o: /home/destoer/projects/gba_tests/gba_tests/pcmxx/source/main.s
+main.o: /mnt/c/projects/gba_tests/gba_tests/pcmxx/source/main.s
