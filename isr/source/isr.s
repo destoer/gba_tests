@@ -54,6 +54,51 @@ isr_size = isr_end - isr
 
 
 
+
+fire_intr_arm:
+    strh r3, [r2]
+	
+	// irq delay shenanigans
+	// (uncomment either)
+	//strh r5, [r2,#8]
+	//strh r5, [r2]
+	//strh r9, [r2,#2]
+	
+	//msr cpsr, r8
+	//msr cpsr,r10
+	//msr cpsr, r8
+
+    // nop sled here in case the return addr is off
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+
+	// reset cpsr after our shenanigans
+	msr cpsr,r10
+
+    // save cpsr
+    mrs r7, cpsr
+	
+	bx lr
+
+	.word 0xdeadbeef
+
+fire_intr_arm_end:
+
+fire_intr_arm_size = fire_intr_arm_end - fire_intr_arm
+
+
+
+
 intr_test_arm:
     push {r0-r7,lr}
 
@@ -104,30 +149,13 @@ vblank_wait_arm:
 	mov r10, r8
 	orr r8, #128
 	
-fire_intr_arm:
-    strh r3, [r2]
-	
-	// irq delay shenanigans
-	// (uncomment either)
-	//strh r5, [r2,#8]
-	//strh r5, [r2]
-	//strh r9, [r2,#2]
-	// msr cpsr, r8
-	
-	// reset cpsr after our shenanigans
-	// msr cpsr,r10
+	ldr lr, =fire_intr_arm_return
+	ldr r0, =#0x03000400 + isr_size 
+	bx r0
 	
 
-    // nop sled here in case the return addr is off
-    nop
-    nop
-    nop
-    nop
-    nop
-    nop
-
-    // save cpsr
-    mrs r7, cpsr
+	// returns to this label!
+fire_intr_arm_return:
 
     ldr r1, [r4]
     cmp r1, #1
@@ -157,7 +185,7 @@ intr_fired_arm:
 
     // calc the lr relative to the intr
     ldr r0, [r4, #8]
-    ldr r1, =#fire_intr_arm
+    ldr r1, =#0x03000400 + isr_size
     sub r0, r1
 
     bl print_hex
@@ -259,6 +287,15 @@ main:
 
     bl memcpy
 
+
+	ldr r0, =#0x03000400 + isr_size
+	ldr r1, =fire_intr_arm
+	ldr r2, =fire_intr_arm_size
+	
+	bl memcpy
+
+
+
     // setup our isr pointer
     ldr r0, =#0x03007FFC
     ldr r1, =#0x03000400
@@ -326,6 +363,8 @@ return_thumb:
 infin:
     b infin
 
+
+
 .data
 
 
@@ -349,3 +388,6 @@ thumb_lr_string:
     
 swi_string:
     .asciz "\nswi: \n"
+
+
+
