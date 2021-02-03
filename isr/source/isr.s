@@ -4,7 +4,13 @@
 
     // checks the timing of isrs
     // and that the return address is set properly
-
+	// irq delay throws this test off
+	// with no irq delay you should get 8 & 6 for the lr returns
+	// and with it you should get 10 & A
+	// unccoment the str near the arm intr trigger if you want to test the irq delay a little more
+	
+	// TODO: add code to correct the first test for irq delay
+	// and add more test cases for it!
 isr:
 
     // ackknowledge intr and pull timer
@@ -90,11 +96,12 @@ vblank_wait_arm:
     // make sure your pipeline is full if you emulate it
     // or youll get some nice behavior
     ldr r7, =#0xdeadbeef // make it obv if you dont read cpsr back nicely
+	mov r5, #0
 fire_intr_arm:
     strh r3, [r2]
-
-    // save cpsr
-    mrs r7, cpsr
+	
+	// irq delay shenanigans
+	// strh r5, [r2]
 
     // nop sled here in case the return addr is off
     nop
@@ -103,6 +110,9 @@ fire_intr_arm:
     nop
     nop
     nop
+
+    // save cpsr
+    mrs r7, cpsr
 
     ldr r1, [r4]
     cmp r1, #1
@@ -311,7 +321,7 @@ intr_fired_string:
     .asciz "interrupt fired\n"
 
 cpsr_string:
-    .asciz "\ncspr: "
+    .asciz "\ncpsr: "
 
 timer_string:
     .asciz "timer: "

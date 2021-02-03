@@ -84,19 +84,18 @@ Linker script and memory map
                 0x0000000008000220       0x2c /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/crtbegin.o
  .text.frame_dummy
                 0x000000000800024c       0x24 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/crtbegin.o
- .text          0x0000000008000270      0x240 isr.o
-                0x00000000080003b8                main
- .text          0x00000000080004b0      0x1e4 text.o
-                0x00000000080004b0                init_text
-                0x000000000800053c                putchar
-                0x00000000080005dc                write
-                0x0000000008000608                print_hex
+ .text          0x0000000008000270      0x244 isr.o
+                0x00000000080003bc                main
+ .text          0x00000000080004b4      0x1e4 text.o
+                0x00000000080004b4                init_text
+                0x0000000008000540                putchar
+                0x00000000080005e0                write
+                0x000000000800060c                print_hex
  .text.__libc_init_array
-                0x0000000008000694       0x50 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/libg.a(lib_a-init.o)
-                0x0000000008000694                __libc_init_array
- .text.memcpy   0x00000000080006e4       0xa8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/libg.a(lib_a-memcpy-stub.o)
-                0x00000000080006e4                memcpy
- *fill*         0x000000000800078c        0x4 ff
+                0x0000000008000698       0x50 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/libg.a(lib_a-init.o)
+                0x0000000008000698                __libc_init_array
+ .text.memcpy   0x00000000080006e8       0xa8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../arm-none-eabi/lib/thumb/libg.a(lib_a-memcpy-stub.o)
+                0x00000000080006e8                memcpy
  .text.memcpy.__stub
                 0x0000000008000790        0xc linker stubs
  *(.gnu.linkonce.t.*)
@@ -443,5 +442,5 @@ LOAD /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/10.2.0/../../../../ar
 END GROUP
 LOAD /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/crtend.o
 LOAD /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/10.2.0/thumb/crtn.o
-OUTPUT(/home/destoer/projects/gba_tests/gba_tests/isr/isr.elf elf32-littlearm)
+OUTPUT(/mnt/c/projects/gba_tests/gba_tests/isr/isr.elf elf32-littlearm)
 LOAD linker stubs
