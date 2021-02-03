@@ -97,11 +97,26 @@ vblank_wait_arm:
     // or youll get some nice behavior
     ldr r7, =#0xdeadbeef // make it obv if you dont read cpsr back nicely
 	mov r5, #0
+	mov r9, #0xffffffff
+	
+	// via cpsr
+	mrs r8, cpsr
+	mov r10, r8
+	orr r8, #128
+	
 fire_intr_arm:
     strh r3, [r2]
 	
 	// irq delay shenanigans
-	// strh r5, [r2]
+	// (uncomment either)
+	//strh r5, [r2,#8]
+	//strh r5, [r2]
+	//strh r9, [r2,#2]
+	// msr cpsr, r8
+	
+	// reset cpsr after our shenanigans
+	// msr cpsr,r10
+	
 
     // nop sled here in case the return addr is off
     nop
