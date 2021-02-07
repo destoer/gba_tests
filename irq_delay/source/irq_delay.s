@@ -4,6 +4,14 @@
 
     // irq delay test!
     // 1 2 IRQ!
+    // points so far
+    // cpsr enable is checked as the service is done
+    // IE & IF is cached for the delay until service
+    // ie resetting them or IME after the trigger has allready happened
+    // wont do anything.
+    // the intr will still fire if the cpsr bit is enabled
+    
+    // if cpsr is not ready at this point it is lost
 isr:
 
     // ackknowledge intr and pull timer
@@ -206,7 +214,7 @@ test_six_end:
 test_six_size = test_six_end - test_six
 
 // test seven
-// cpsr off before forece
+// cpsr off before force
 test_seven:
     // force an intr
     strh r3, [r2]
@@ -228,6 +236,61 @@ test_seven:
 test_seven_end:
 
 test_seven_size = test_seven_end - test_seven
+
+
+
+// test eight
+// instr with large number of internal cycles
+test_eight:
+    // force an intr
+    strh r3, [r2]
+    
+    mul r2, r5
+    mul r2, r5
+    mul r2, r5
+    mul r2, r5
+
+	
+    // nop sled here in case the return addr is off
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
+	nop
+
+	bx lr
+
+test_eight_end:
+
+test_eight_size = test_eight_end - test_eight
+
+
+// test nine
+// instr with a mix or internal and memory cycles
+test_nine:
+    // force an intr
+    strh r3, [r2]
+    
+    swp r0, r1, [r2]
+   
+	
+    // nop sled here in case the return addr is off
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
+	nop
+
+	bx lr
+
+test_nine_end:
+
+test_nine_size = test_nine_end - test_nine
+
 
 // r1 address of test routine
 // r2 routine size
@@ -412,7 +475,15 @@ main:
     ldr r1, =test_seven
     ldr r2, =test_seven_size
     bl intr_test_arm
-    
+
+    ldr r1, =test_eight
+    ldr r2, =test_eight_size
+    bl intr_test_arm
+
+    ldr r1, =test_nine
+    ldr r2, =test_nine_size
+    bl intr_test_arm    
+
 infin:
     b infin
 
