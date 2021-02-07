@@ -320,6 +320,34 @@ test_ten_end:
 
 test_ten_size = test_ten_end - test_ten
 
+
+
+// test eleven
+// force with swp
+test_eleven:
+    // force an intr
+    // swp
+    swp r0, r9, [r2]
+    mul r2, r5
+    mul r2, r5
+   
+	
+    // nop sled here in case the return addr is off
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
+	nop
+
+	bx lr
+
+test_eleven_end:
+
+test_eleven_size = test_eleven_end - test_eleven
+
+
 // r1 address of test routine
 // r2 routine size
 
@@ -468,7 +496,7 @@ main:
 	mov r10, r8
 	orr r8, #128
     
-    ldr r7, =#0x07000000
+    
 
     
     
@@ -490,6 +518,7 @@ main:
     ldr r2, =test_four_size
     bl intr_test_arm
     
+    ldr r7, =#0x07000000
     ldr r1, =test_five
     ldr r2, =test_five_size
     bl intr_test_arm
@@ -514,6 +543,11 @@ main:
 
     ldr r1, =test_ten
     ldr r2, =test_ten_size
+    bl intr_test_arm  
+    
+    ldr r9, =#0xffff
+    ldr r1, =test_eleven
+    ldr r2, =test_eleven_size
     bl intr_test_arm  
     
 infin:
