@@ -292,6 +292,34 @@ test_nine_end:
 test_nine_size = test_nine_end - test_nine
 
 
+
+
+
+// test ten
+// branch after force
+test_ten:
+    // force an intr
+    strh r3, [r2]
+    
+    b heh
+   
+	
+    // nop sled here in case the return addr is off
+    nop
+    nop
+heh:
+    nop
+    nop
+    nop
+    nop
+	nop
+
+	bx lr
+
+test_ten_end:
+
+test_ten_size = test_ten_end - test_ten
+
 // r1 address of test routine
 // r2 routine size
 
@@ -484,6 +512,10 @@ main:
     ldr r2, =test_nine_size
     bl intr_test_arm    
 
+    ldr r1, =test_ten
+    ldr r2, =test_ten_size
+    bl intr_test_arm  
+    
 infin:
     b infin
 
