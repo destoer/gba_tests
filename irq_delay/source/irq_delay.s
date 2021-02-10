@@ -59,10 +59,10 @@ test_one:
     strh r3, [r2]
 	
     // nop sled here in case the return addr is off
-    nop
-    nop
-    nop
-    nop
+    nop // <--- 0
+    nop 
+    nop // <--- rom : 9b
+    nop // <--- wram : 9f
     nop
     nop
 	nop
@@ -83,8 +83,8 @@ test_two:
     strh r5, [r2]
 	
     // nop sled here in case the return addr is off
-    nop
-    nop
+    nop // <-- rom : 9f
+    nop // <-- wram : 93
     nop
     nop
     nop
@@ -113,8 +113,8 @@ test_three:
 	
     // nop sled here in case the return addr is off
     nop
-    nop
-    nop
+    nop // <-- wram : 95  
+    nop // rom no intr
     nop
     nop
     nop
@@ -130,6 +130,7 @@ test_three_size = test_three_end - test_three
 
 // test four
 // when does the intr check expire?
+// no interrupt (rom & wram)
 test_four:
     // force an intr
     strh r3, [r2]
@@ -174,7 +175,7 @@ test_five:
 	stm r7, {r0-r15}
 	
     // nop sled here in case the return addr is off
-    nop
+    nop // <-- wram: a1, rom: ae
     nop
     nop
     nop
@@ -198,7 +199,7 @@ test_six:
     msr cpsr,r8
     msr cpsr,r10
     msr cpsr,r8
-    msr cpsr,r10
+    msr cpsr,r10 // <-- wram: 93, rom: 9f (what the fuck)
     msr cpsr,r8
     msr cpsr,r10
     msr cpsr,r8
@@ -233,8 +234,8 @@ test_seven:
 	
     // nop sled here in case the return addr is off
     nop
-    nop
-    nop
+    nop // <-- rom: 9b
+    nop // <-- wram: 93
     nop
     nop
     nop
@@ -255,7 +256,7 @@ test_eight:
     strh r3, [r2]
     
     mul r2, r5
-    mul r2, r5
+    mul r2, r5  // <-- wram: 95, rom: a2
     mul r2, r5
     mul r2, r5
 
@@ -286,7 +287,7 @@ test_nine:
    
 	
     // nop sled here in case the return addr is off
-    nop
+    nop // <-- wram: 94, rom: a1
     nop
     nop
     nop
@@ -317,7 +318,7 @@ test_ten:
     nop
     nop
 heh:
-    nop
+    nop // <-- wram: 93, rom: a6
     nop
     nop
     nop
@@ -338,7 +339,7 @@ test_eleven:
     // swp
     swp r0, r9, [r2]
     mul r2, r5
-    mul r2, r5
+    mul r2, r5 // <-- wram: 97, rom: a4
    
 	
     // nop sled here in case the return addr is off
@@ -464,6 +465,8 @@ intr_fired_arm:
     ldr r0, [r4, #8]
     mov r1, r2
     sub r0, r1
+    lsr r0, #2
+    sub r0, #2
 
     bl print_hex
 
