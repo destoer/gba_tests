@@ -190,10 +190,19 @@ test_five_size = test_five_end - test_five
 
 // test six
 // rapid toggle of irq bit
+// thanks YAED
 test_six:
     // force an intr
     strh r3, [r2]
     
+    msr cpsr,r8
+    msr cpsr,r10
+    msr cpsr,r8
+    msr cpsr,r10
+    msr cpsr,r8
+    msr cpsr,r10
+    msr cpsr,r8
+    msr cpsr,r10
     msr cpsr,r8
     msr cpsr,r10
 
@@ -348,44 +357,55 @@ test_eleven_end:
 test_eleven_size = test_eleven_end - test_eleven
 
 
+setup_timer:
+    push {r0-r2}
+
+    // setup timer 0 to count the intr time
+    // setup the timers
+    ldr r0, =#0x04000100
+    mov r2, #0
+    strh r2, [r0]
+    strh r2, [r0,#2]
+    mov r2, #0x80
+    strh r2, [r0,#2]  
+    
+    pop {r0-r2}
+    bx lr
+
+    
+wait_vblank:
+    push {r0-r2}
+    
+    ldr r2, =#0x04000202
+
+    // wait for a vblank intr
+    // we will use this to force an intr later
+vblank_wait_arm:
+    ldrh r3, [r2]
+    and r3, #1
+    cmp r3, #1
+    bne vblank_wait_arm
+    
+    pop {r0-r2}
+    
+    bx lr
+    
 // r1 address of test routine
 // r2 routine size
 
 intr_test_arm:
     push {r0-r11,lr}
-
+    
     // copy routine into wram
 	ldr r0, =#0x03000400 + isr_size
 	bl memcpy    
     
     
-    ldr r1, =#0x04000202
 
-    // wait for a vblank intr
-    // we will use this to force an intr later
-vblank_wait_arm:
-    ldrh r3, [r1]
-    and r3, #1
-    cmp r3, #1
-    bne vblank_wait_arm
+    bl wait_vblank
 
 
-
-
-
-    // setup timer 0 to count the intr time
-    // setup the timers
-    ldr r0, =#0x04000100
-    mov r1, #0
-    strh r1, [r0]
-    strh r1, [r0,#2]
-    mov r1, #0x80
-    strh r1, [r0,#2]   
-
-
-    // preload some vars for reading out results
-    mov r4, #0x02000000
-    add r4, #0x400
+    bl setup_timer
 
 
     // set ie mask to allow all
@@ -402,9 +422,25 @@ vblank_wait_arm:
 	// returns to this label!
 fire_intr_arm_return:
 
+    ldr r2, =#0x03000400 + isr_size 
+    bl print_results
+    
+    pop {r0-r11,lr}
+    bx lr
+
+    
+    
+// r2 address of intr
+print_results:
+    push {r0-r10,lr}
+    
     // reset cpsr after any potential shenanigans
 	msr cpsr,r10
 
+    // preload some vars for reading out results
+    mov r4, #0x02000000
+    add r4, #0x400	
+	
     ldr r1, [r4]
     
     // reset interrupt trigger
@@ -426,7 +462,7 @@ intr_fired_arm:
 
     // calc the lr relative to the intr
     ldr r0, [r4, #8]
-    ldr r1, =#0x03000400 + isr_size
+    mov r1, r2
     sub r0, r1
 
     bl print_hex
@@ -438,10 +474,6 @@ intr_fired_arm:
     ldr r0, [r4,#4]
     bl print_hex
 
-    ldr r0, =newline_string
-    bl write
-
-
 return_fired:
 
     // set ie mask to disallow all
@@ -449,14 +481,47 @@ return_fired:
     mov r3, #0
     strh r3, [r2]
     
-    pop {r0-r11,lr}
+    pop {r0-r10,lr}
     bx lr
 
+// r1 addr of test
+intr_test_rom:
+    push {r0-r4,lr}
+
+    // call first test from rom
+    bl wait_vblank
+    bl setup_timer
+    
+    // set ie mask to allow all
+    ldr r2, =#0x04000200
+    mov r3, #0xffffffff
+    
+    ldr lr, =intr_test_rom_ret
+    bx r1
+   
+intr_test_rom_ret:
+
+    ldr r0, =split_string
+    bl write
+
+    mov r2, r1
+    bl print_results
+    
+    pop {r0-r4,lr}
+    bx lr
+    
 main:
 	// turn off interrupts
 	ldr r1, =#0x04000208
 	str r1, [r1]
 
+	
+	// MAX WAITSTATES
+	ldr r0, =#0x04000204
+	mov r1, #0xff
+	strb r1, [r0]
+	
+	
 	bl init_text
 
     // copy our isr to wram
@@ -505,50 +570,82 @@ main:
 	ldr r1, =test_one
 	ldr r2, =test_one_size
     bl intr_test_arm
-
+    bl intr_test_rom
+    ldr r0, =newline_string
+    bl write
+    
 	ldr r1, =test_two
 	ldr r2, =test_two_size
     bl intr_test_arm
+    bl intr_test_rom
+    ldr r0, =newline_string
+    bl write
     
 	ldr r1, =test_three
 	ldr r2, =test_three_size
     bl intr_test_arm
+    bl intr_test_rom
+    ldr r0, =newline_string
+    bl write
     
     ldr r1, =test_four
     ldr r2, =test_four_size
     bl intr_test_arm
+    bl intr_test_rom
+    ldr r0, =newline_string
+    bl write
     
     ldr r7, =#0x07000000
     ldr r1, =test_five
     ldr r2, =test_five_size
     bl intr_test_arm
-    
+    bl intr_test_rom
+    ldr r0, =newline_string
+    bl write    
     
     ldr r1, =test_six
     ldr r2, =test_six_size
-    bl intr_test_arm    
+    bl intr_test_arm
+    bl intr_test_rom
+    ldr r0, =newline_string
+    bl write
     
     msr cpsr,r8
     ldr r1, =test_seven
     ldr r2, =test_seven_size
     bl intr_test_arm
-
+    bl intr_test_rom
+    ldr r0, =newline_string
+    bl write
+    
     ldr r1, =test_eight
     ldr r2, =test_eight_size
     bl intr_test_arm
-
+    bl intr_test_rom
+    ldr r0, =newline_string
+    bl write
+    
     ldr r1, =test_nine
     ldr r2, =test_nine_size
-    bl intr_test_arm    
-
+    bl intr_test_arm
+    bl intr_test_rom
+    ldr r0, =newline_string
+    bl write
+    
     ldr r1, =test_ten
     ldr r2, =test_ten_size
-    bl intr_test_arm  
+    bl intr_test_arm
+    bl intr_test_rom
+    ldr r0, =newline_string
+    bl write
     
     ldr r9, =#0xffff
     ldr r1, =test_eleven
     ldr r2, =test_eleven_size
-    bl intr_test_arm  
+    bl intr_test_arm
+    bl intr_test_rom
+    ldr r0, =newline_string
+    bl write    
     
 infin:
     b infin
@@ -559,7 +656,7 @@ infin:
 
 
 no_intr_string:
-    .asciz "no interrupt\n"
+    .asciz "no interrupt"
 
 
 split_string:
