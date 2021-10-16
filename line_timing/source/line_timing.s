@@ -4,6 +4,13 @@
 .arm
 .text
 
+
+/*
+    tests basic line timings
+
+ */
+
+
 // wait for vcount to sync line then wait for hblank
 wait_intr:
     push {r0-r3,lr}

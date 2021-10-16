@@ -2,7 +2,9 @@
 .arm
 .text
 
-    // checks the intr are acknowledged by writing a '1' bit to it
+/* 
+    checks the intr are acknowledged by writing a '1' bit to it
+*/
 
 main:
 	// turn off interrupts

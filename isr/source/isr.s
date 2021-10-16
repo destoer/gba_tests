@@ -1,16 +1,14 @@
 .global main
 .arm
 .text
-
-    // checks the timing of isrs
-    // and that the return address is set properly
-	// irq delay throws this test off
-	// with no irq delay you should get 8 & 6 for the lr returns
-	// and with it you should get 10 & A
-	// unccoment the str near the arm intr trigger if you want to test the irq delay a little more
-	
-	// TODO: add code to correct the first test for irq delay
-	// and add more test cases for it!
+/*
+    checks the timing of isrs
+    and that the return address is set properly
+	irq delay throws this test off
+	with no irq delay you should get 8 & 6 for the lr returns
+	and with it you should get 10 & A
+	unccoment the str near the arm intr trigger if you want to test the irq delay a little more
+*/
 isr:
 
     // ackknowledge intr and pull timer

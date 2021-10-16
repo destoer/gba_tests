@@ -4,11 +4,6 @@
 .global print_hex
 
 
-// TODO: need to refactor this into a included lib
-// to remove duplication and also add a few other handy helper functions
-// and defines for io regs, if we decide to work on more tests
-
-
 .data
 
 // 1bpp encoding

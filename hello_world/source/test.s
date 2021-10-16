@@ -2,6 +2,11 @@
 .arm
 .text
 
+/*
+	basic test for the printing function 
+	verifys text modes are working enough to print text results
+ */
+
 main:
 	// turn off interrupts
 	ldr r1, =#0x04000208

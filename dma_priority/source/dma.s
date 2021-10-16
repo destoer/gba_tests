@@ -1,6 +1,15 @@
 .global main
 .arm
 .text
+
+
+/*
+    tests priority of dma's
+    by dmaing to the control regs with another dma
+ */
+
+
+
 //r0 dest 
 //r1 source
 //r2 dma reg

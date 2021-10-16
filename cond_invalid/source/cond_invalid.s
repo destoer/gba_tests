@@ -2,6 +2,12 @@
 .arm
 .text
 
+/* 
+    tests that instructions are not executed for the invalid arm condition code
+*/
+
+
+
 main:
 	// turn off interrupts
 	ldr r1, =#0x04000208

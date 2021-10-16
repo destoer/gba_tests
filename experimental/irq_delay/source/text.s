@@ -4,11 +4,6 @@
 .global print_hex
 
 
-// TODO: need to refactor this into a included lib
-// to remove duplication and also add a few other handy helper functions
-// and defines for io regs, if we decide to work on more tests
-
-
 .data
 
 // 1bpp encoding
@@ -267,18 +262,50 @@ write_done:
 // r0 number to print 
 // void return
 print_hex:
-	push {r0-r2}
+	push {r0-r3,lr}
 
+	// special case zero t oprint
+	cmp r0, #0
+    bne print_ge_zero 
+    
+    mov r0, #48
+    bl putchar
+    
+    b end
+    
+print_ge_zero:
 
 	// get each nibble of the arg
 	// and convert it to a char
 	mov r1, r0
 
 	mov r2, #8
+	
+	mov r3, r1
+
+	// while there are leading zeros dont bother printing
+leading_loop:
+
+	and r0, r3, #0xf0000000
+	lsr r0, #28
+	
+	cmp r0, #0
+	bne hex_loop_start
+	
+	
+	lsl r3, #4
+    subs r2, #1
+	bne leading_loop
+	
+hex_loop_start:
+
+	mov r1, r3
+	
 hex_loop:
 	and r0, r1, #0xf0000000
 	lsr r0, #28
 	lsl r1, #4
+	
 	cmp r0, #9
 	bgt conv_upper_hex
 	// convert to a number
@@ -291,14 +318,13 @@ conv_upper_hex:
 
 
 hex_printchar:
-	push {lr}
 	bl putchar
-	pop {lr}
+
 
 	subs r2, #1
 	bne hex_loop
-
-	pop {r0-r2}
+end:
+	pop {r0-r3,lr}
 	bx lr
 
 
